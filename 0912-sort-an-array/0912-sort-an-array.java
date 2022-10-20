@@ -39,9 +39,41 @@ class Solution {
         //     }
         // }
         // return nums;
-        Arrays.sort(nums);
-        return nums;
+        return mergeSort(nums, 0 , n-1);
     }
+    
+    public int[] mergeSort(int[] num, int lo, int hi){
+        if(lo == hi){
+            int[] ba = new int[1];
+            ba[0] = num[lo];
+            return ba;
+        }
+        int mid = lo + (hi - lo) / 2;
+        int[] fsh = mergeSort(num, lo, mid);
+        int[] ssh = mergeSort(num, mid + 1 , hi);
+        int[] fsa = merge(fsh, ssh);
+        return fsa;
+    }
+    
+    public int[] merge(int[] a, int[] b){
+        int[] ans = new int[a.length + b.length];
+        int i = 0, j = 0, k = 0;
+        while(i < a.length && j < b.length){
+            if(a[i] <= b[j]){
+                ans[k++] = a[i++];
+            }else{
+                ans[k++] = b[j++];
+            }
+        }
+        while(i < a.length){
+                ans[k++] = a[i++];
+        }
+        while(j < b.length){
+                ans[k++] = b[j++];
+        }
+        return ans;
+    }
+    
     public int getIndex(int[] num, int s, int e){
         int maxInd = s;
         for(int i = s ; i <= e ; i++){
