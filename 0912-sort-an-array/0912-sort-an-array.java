@@ -39,7 +39,62 @@ class Solution {
         //     }
         // }
         // return nums;
-        return mergeSort(nums, 0 , n-1);
+        
+        //merge sort
+        //return mergeSort(nums, 0 , n-1);
+        
+        // quickSort(nums, 0, n-1);
+        
+        //count sort
+        int min = nums[0], max = nums[0];
+        for(int i = 0 ; i < n ; i++){
+            min = Math.min(nums[i], min);
+            max = Math.max(nums[i], max);
+        }
+        
+        int[] freq = new int[max - min + 1];
+        
+        for(int i = 0 ; i < nums.length ; i++){
+            int idx = nums[i] - min;
+            freq[idx]++;
+        }
+        
+        for(int i = 1 ; i < freq.length ; i++){
+            freq[i] = freq[i] + freq[i-1];  
+        }
+        
+        int[] ans = new int[nums.length];
+        for(int i = nums.length - 1 ; i >= 0 ; i--){
+            int val =  nums[i];
+            int pos = freq[val - min];
+            int idx = pos - 1;
+            ans[idx] = val;
+            freq[val - min]--;
+        }
+        
+        return ans;
+    }
+    
+    public void quickSort(int[] nums, int lo, int hi){
+        if(lo >= hi) return;
+        int pivot = nums[hi];
+        int pi = partition(nums, pivot, lo, hi);
+        quickSort(nums, lo, pi-1);
+        quickSort(nums, pi+1, hi);
+    }
+    
+    public int partition(int[] nums, int pivot, int lo, int hi){
+        int i = lo, j = lo;
+        while(i <= hi){
+            if(nums[i] <= pivot){
+                swap(nums, i, j);
+                i++;
+                j++;
+            }else{
+                i++;
+            }
+        }
+        return j - 1;
     }
     
     public int[] mergeSort(int[] num, int lo, int hi){
